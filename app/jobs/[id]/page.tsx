@@ -29,7 +29,14 @@ export default async function JobDetailPage({ params }: { params: { id: string }
     }
 
     const tags = job.tags || [];
-    const createdAt = job.created_at ? new Date(job.created_at).toLocaleDateString("ja-JP") : null;
+    const createdAt = (() => {
+        const value = job.created_at;
+        if (typeof value === "string" || typeof value === "number" || value instanceof Date) {
+            const parsed = new Date(value);
+            return Number.isNaN(parsed.getTime()) ? null : parsed.toLocaleDateString("ja-JP");
+        }
+        return null;
+    })();
     const heroImage = job.hero_image_url || job.gallery_image_url || "/jobs-bg.jpg";
 
     return (
