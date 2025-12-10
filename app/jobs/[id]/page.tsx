@@ -29,6 +29,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
     }
 
     const tags = job.tags || [];
+    const resolveImage = (value: unknown) => (typeof value === "string" && value.trim() ? value : null);
     const createdAt = (() => {
         const value = job.created_at;
         if (typeof value === "string" || typeof value === "number" || value instanceof Date) {
@@ -37,7 +38,8 @@ export default async function JobDetailPage({ params }: { params: { id: string }
         }
         return null;
     })();
-    const heroImage = job.hero_image_url || job.gallery_image_url || "/jobs-bg.jpg";
+    const heroImage = resolveImage(job.hero_image_url) || resolveImage(job.gallery_image_url) || "/jobs-bg.jpg";
+    const galleryImage = resolveImage(job.gallery_image_url);
 
     return (
         <div className="min-h-screen bg-slate-50">
@@ -187,21 +189,21 @@ export default async function JobDetailPage({ params }: { params: { id: string }
                     </div>
 
                     <div className="space-y-6">
-                        {(job.hero_image_url || job.gallery_image_url) && (
+                        {(heroImage || galleryImage) && (
                             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                                 <div className="aspect-[4/3] relative">
                                     <Image
-                                        src={job.hero_image_url || job.gallery_image_url || "/jobs-bg.jpg"}
+                                        src={heroImage}
                                         alt="求人イメージ"
                                         fill
                                         className="object-cover"
                                     />
                                 </div>
-                                {job.gallery_image_url && (
+                                {galleryImage && (
                                     <div className="p-3 border-t border-slate-200">
                                         <div className="aspect-[16/9] relative rounded-lg overflow-hidden bg-slate-100">
                                             <Image
-                                                src={job.gallery_image_url}
+                                                src={galleryImage}
                                                 alt="サブイメージ"
                                                 fill
                                                 className="object-cover"
