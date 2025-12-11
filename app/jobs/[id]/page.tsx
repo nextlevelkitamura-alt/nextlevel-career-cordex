@@ -47,7 +47,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
         <div className="min-h-screen bg-slate-50">
             <div className="relative">
                 <div className="absolute inset-0">
-                    <Image src={heroImage} alt={job.title} fill className="object-cover opacity-20" priority />
+                    <Image src={heroImage as string} alt={job.title} fill className="object-cover opacity-20" priority />
                     <div className="absolute inset-0 bg-slate-900/70" />
                 </div>
                 <div className="container relative z-10 mx-auto px-4 py-10">
@@ -195,7 +195,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
                             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                                 <div className="aspect-[4/3] relative">
                                     <Image
-                                        src={heroImage}
+                                        src={heroImage as string}
                                         alt="求人イメージ"
                                         fill
                                         className="object-cover"
