@@ -28,7 +28,8 @@ export default async function JobDetailPage({ params }: { params: { id: string }
         notFound();
     }
 
-    const tags = job.tags || [];
+    const tags = Array.isArray(job.tags) ? job.tags.filter((tag): tag is string => typeof tag === "string") : [];
+    const jobTitle = typeof job.title === "string" ? job.title : "求人詳細";
     const resolveImage = (value: unknown) => (typeof value === "string" && value.trim() ? value : null);
     const createdAt = (() => {
         const value = job.created_at;
@@ -38,16 +39,17 @@ export default async function JobDetailPage({ params }: { params: { id: string }
         }
         return null;
     })();
-    const heroImage = (resolveImage(job.hero_image_url) ||
-        resolveImage(job.gallery_image_url) ||
-        "/jobs-bg.jpg") as string;
+    const heroImage =
+        resolveImage(job.hero_image_url) ??
+        resolveImage(job.gallery_image_url) ??
+        "/jobs-bg.jpg";
     const galleryImage = resolveImage(job.gallery_image_url);
 
     return (
         <div className="min-h-screen bg-slate-50">
             <div className="relative">
                 <div className="absolute inset-0">
-                    <Image src={heroImage as string} alt={job.title} fill className="object-cover opacity-20" priority />
+                    <Image src={heroImage} alt={jobTitle} fill className="object-cover opacity-20" priority />
                     <div className="absolute inset-0 bg-slate-900/70" />
                 </div>
                 <div className="container relative z-10 mx-auto px-4 py-10">
@@ -68,7 +70,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
                                         <span className="text-xs font-mono text-primary-100">ID: {job.job_code}</span>
                                     )}
                                 </div>
-                                <h1 className="text-3xl md:text-4xl font-bold text-white">{job.title}</h1>
+                                <h1 className="text-3xl md:text-4xl font-bold text-white">{jobTitle}</h1>
                                 {job.hero_title && (
                                     <p className="text-lg text-primary-50">{job.hero_title}</p>
                                 )}
@@ -195,7 +197,7 @@ export default async function JobDetailPage({ params }: { params: { id: string }
                             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                                 <div className="aspect-[4/3] relative">
                                     <Image
-                                        src={heroImage as string}
+                                        src={heroImage}
                                         alt="求人イメージ"
                                         fill
                                         className="object-cover"
