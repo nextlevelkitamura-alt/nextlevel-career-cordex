@@ -38,7 +38,9 @@ export default async function JobDetailPage({ params }: { params: { id: string }
         }
         return null;
     })();
-    const heroImage = resolveImage(job.hero_image_url) || resolveImage(job.gallery_image_url) || "/jobs-bg.jpg";
+    const heroImage = (resolveImage(job.hero_image_url) ||
+        resolveImage(job.gallery_image_url) ||
+        "/jobs-bg.jpg") as string;
     const galleryImage = resolveImage(job.gallery_image_url);
 
     return (
