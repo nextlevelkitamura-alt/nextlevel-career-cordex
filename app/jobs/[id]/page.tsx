@@ -28,8 +28,27 @@ export default async function JobDetailPage({ params }: { params: { id: string }
         notFound();
     }
 
+    const toText = (value: unknown) => (typeof value === "string" && value.trim() ? value : null);
     const tags = Array.isArray(job.tags) ? job.tags.filter((tag): tag is string => typeof tag === "string") : [];
-    const jobTitle = typeof job.title === "string" ? job.title : "求人詳細";
+    const jobTitle = toText(job.title) ?? "求人詳細";
+    const category = toText(job.category);
+    const jobCode = toText(job.job_code);
+    const heroTitle = toText(job.hero_title);
+    const area = toText(job.area);
+    const type = toText(job.type);
+    const salary = toText(job.salary);
+    const heroLead = toText(job.hero_lead);
+    const jobDescription = toText(job.job_description);
+    const workLocation = toText(job.work_location) ?? area;
+    const nearestStation = toText(job.nearest_station);
+    const workTime = toText(job.work_time);
+    const workDays = toText(job.work_days) ?? toText(job.holidays);
+    const requirements = toText(job.requirements);
+    const welcome = toText(job.welcome);
+    const benefits = toText(job.benefits);
+    const selectionFlow = toText(job.selection_flow);
+    const remarks = toText(job.remarks);
+    const recommendation = toText(job.recommendation);
     const resolveImage = (value: unknown) => (typeof value === "string" && value.trim() ? value : null);
     const createdAt = (() => {
         const value = job.created_at;
@@ -64,32 +83,32 @@ export default async function JobDetailPage({ params }: { params: { id: string }
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3 flex-wrap">
                                     <span className="px-3 py-1 rounded-full text-sm bg-primary-200/20 text-white border border-white/20">
-                                        {job.category}
+                                        {category}
                                     </span>
-                                    {job.job_code && (
-                                        <span className="text-xs font-mono text-primary-100">ID: {job.job_code}</span>
+                                    {jobCode && (
+                                        <span className="text-xs font-mono text-primary-100">ID: {jobCode}</span>
                                     )}
                                 </div>
                                 <h1 className="text-3xl md:text-4xl font-bold text-white">{jobTitle}</h1>
-                                {job.hero_title && (
-                                    <p className="text-lg text-primary-50">{job.hero_title}</p>
+                                {heroTitle && (
+                                    <p className="text-lg text-primary-50">{heroTitle}</p>
                                 )}
                                 <div className="flex flex-wrap gap-4 text-primary-50 text-sm">
                                     <span className="flex items-center gap-2">
                                         <MapPin className="w-4 h-4" />
-                                        {job.area}
+                                        {area}
                                     </span>
                                     <span className="flex items-center gap-2">
                                         <Briefcase className="w-4 h-4" />
-                                        {job.type}
+                                        {type}
                                     </span>
                                     <span className="flex items-center gap-2">
                                         <Banknote className="w-4 h-4" />
-                                        {job.salary}
+                                        {salary}
                                     </span>
                                     {createdAt && <span className="text-primary-100/80">掲載日: {createdAt}</span>}
                                 </div>
-                                {job.hero_lead && <p className="text-primary-50 leading-relaxed">{job.hero_lead}</p>}
+                                {heroLead && <p className="text-primary-50 leading-relaxed">{heroLead}</p>}
                                 {tags.length > 0 && (
                                     <div className="flex flex-wrap gap-2">
                                         {tags.map((tag: string, idx: number) => (
@@ -123,13 +142,13 @@ export default async function JobDetailPage({ params }: { params: { id: string }
             <div className="container mx-auto px-4 py-10 md:py-16">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2 space-y-6">
-                        {job.recommendation && (
+                        {recommendation && (
                             <section className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
                                 <div className="flex items-center gap-2 mb-3">
                                     <Sparkles className="w-5 h-5 text-primary-600" />
                                     <h2 className="text-lg font-bold text-slate-900">こんな方におすすめ</h2>
                                 </div>
-                                <p className="text-slate-700 leading-relaxed whitespace-pre-line">{job.recommendation}</p>
+                                <p className="text-slate-700 leading-relaxed whitespace-pre-line">{recommendation}</p>
                             </section>
                         )}
 
@@ -139,54 +158,54 @@ export default async function JobDetailPage({ params }: { params: { id: string }
                                 <h2 className="text-lg font-bold text-slate-900">求人詳細</h2>
                             </div>
 
-                            {job.job_description && (
+                            {jobDescription && (
                                 <div>
                                     <p className="text-xs font-semibold text-slate-500 mb-1">仕事内容</p>
-                                    <p className="text-slate-800 leading-relaxed whitespace-pre-line">{job.job_description}</p>
+                                    <p className="text-slate-800 leading-relaxed whitespace-pre-line">{jobDescription}</p>
                                 </div>
                             )}
 
                             <div className="grid sm:grid-cols-2 gap-4">
-                                <DetailItem label="勤務地" value={job.work_location || job.area} icon={<MapPin className="w-4 h-4 text-slate-400" />} />
-                                <DetailItem label="最寄駅・アクセス" value={job.nearest_station} icon={<Bus className="w-4 h-4 text-slate-400" />} />
-                                <DetailItem label="勤務時間・シフト" value={job.work_time} icon={<Clock3 className="w-4 h-4 text-slate-400" />} />
-                                <DetailItem label="勤務日数・休日" value={job.work_days || job.holidays} icon={<Briefcase className="w-4 h-4 text-slate-400" />} />
-                                <DetailItem label="給与" value={job.salary} icon={<Banknote className="w-4 h-4 text-slate-400" />} />
-                                <DetailItem label="雇用形態" value={job.type} icon={<Tag className="w-4 h-4 text-slate-400" />} />
+                                <DetailItem label="勤務地" value={workLocation} icon={<MapPin className="w-4 h-4 text-slate-400" />} />
+                                <DetailItem label="最寄駅・アクセス" value={nearestStation} icon={<Bus className="w-4 h-4 text-slate-400" />} />
+                                <DetailItem label="勤務時間・シフト" value={workTime} icon={<Clock3 className="w-4 h-4 text-slate-400" />} />
+                                <DetailItem label="勤務日数・休日" value={workDays} icon={<Briefcase className="w-4 h-4 text-slate-400" />} />
+                                <DetailItem label="給与" value={salary} icon={<Banknote className="w-4 h-4 text-slate-400" />} />
+                                <DetailItem label="雇用形態" value={type} icon={<Tag className="w-4 h-4 text-slate-400" />} />
                             </div>
 
-                            {job.requirements && (
+                            {requirements && (
                                 <div>
                                     <p className="text-xs font-semibold text-slate-500 mb-1">応募条件</p>
-                                    <p className="text-slate-800 leading-relaxed whitespace-pre-line">{job.requirements}</p>
+                                    <p className="text-slate-800 leading-relaxed whitespace-pre-line">{requirements}</p>
                                 </div>
                             )}
 
-                            {job.welcome && (
+                            {welcome && (
                                 <div>
                                     <p className="text-xs font-semibold text-slate-500 mb-1">歓迎スキル・人物像</p>
-                                    <p className="text-slate-800 leading-relaxed whitespace-pre-line">{job.welcome}</p>
+                                    <p className="text-slate-800 leading-relaxed whitespace-pre-line">{welcome}</p>
                                 </div>
                             )}
 
-                            {job.benefits && (
+                            {benefits && (
                                 <div>
                                     <p className="text-xs font-semibold text-slate-500 mb-1">待遇・福利厚生</p>
-                                    <p className="text-slate-800 leading-relaxed whitespace-pre-line">{job.benefits}</p>
+                                    <p className="text-slate-800 leading-relaxed whitespace-pre-line">{benefits}</p>
                                 </div>
                             )}
 
-                            {job.selection_flow && (
+                            {selectionFlow && (
                                 <div>
                                     <p className="text-xs font-semibold text-slate-500 mb-1">選考フロー</p>
-                                    <p className="text-slate-800 leading-relaxed whitespace-pre-line">{job.selection_flow}</p>
+                                    <p className="text-slate-800 leading-relaxed whitespace-pre-line">{selectionFlow}</p>
                                 </div>
                             )}
 
-                            {job.remarks && (
+                            {remarks && (
                                 <div>
                                     <p className="text-xs font-semibold text-slate-500 mb-1">備考</p>
-                                    <p className="text-slate-800 leading-relaxed whitespace-pre-line">{job.remarks}</p>
+                                    <p className="text-slate-800 leading-relaxed whitespace-pre-line">{remarks}</p>
                                 </div>
                             )}
                         </section>
