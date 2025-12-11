@@ -5,5 +5,5 @@ export const dynamic = "force-dynamic";
 
 export default async function JobsPage() {
     const jobs = await getPublicJobs();
-    return <JobsClient initialJobs={jobs || []} />;
+    return <JobsClient initialJobs={(jobs as any) || []} />;
 }
